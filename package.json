@@ -2,5 +2,14 @@
   "name": "scrive",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/parser": "^7.11.5",
+    "@babel/traverse": "^7.11.5",
+    "jest": "^26.5.3"
+  }
 }
