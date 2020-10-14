@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`integration with babel ArrowFunctionExpression get by name should allow a user to modify an anonymous function 1`] = `
+"const foo = llalal;
+const bar = () => {};"
+`;
+
+exports[`integration with babel ArrowFunctionExpression get by name should modify only the selected anonymous functions 1`] = `
+"const foo = () => {};
+const bar = llalal;"
+`;
+
 exports[`integration with babel should overwrite 1`] = `
 "const { TestScheduler } = require(\\"jest\\");
 

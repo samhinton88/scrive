@@ -1,5 +1,12 @@
 const { camelToTokens } = require('../utils')
-const { NAME_MAPPING } = require('../query/name-mappings')
+const { NAME_MAPPING } = require('../query/name-mappings');
+
+const getLookup = str => {
+
+  if (NAME_MAPPING[str.toLowerCase()]) return 
+}
+
+const nativePlurals = ['TSExpressionWithTypeArguments'].map(s => s.toLowerCase());
 
 const handler = {
   get(target, name) {
@@ -8,10 +15,14 @@ const handler = {
     }
 
     const tokens = camelToTokens(name);
-    const firstToken = tokens[0];
+    const lowerCaseName = name.toLowerCase();
 
-    const isPlural = firstToken.endsWith('s');
-    const lookup = isPlural ? firstToken.slice(0, -1) : firstToken;
+    const isPlural = lowerCaseName.endsWith('s') 
+      && !nativePlurals.includes(lowerCaseName);
+      
+    const lookup = isPlural ?
+      lowerCaseName.slice(0, -1) : lowerCaseName;
+
     const partType = NAME_MAPPING[lookup];
 
     target.queries.push({ isPlural, partType });
