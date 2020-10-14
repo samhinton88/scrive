@@ -3,6 +3,7 @@ const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
 
+
 const testCode = `const { TestScheduler } = require("jest");
 
 const TYPES = [
@@ -115,17 +116,14 @@ const scrive = (parser) => new Proxy(new Scrive(parser), handler);
 
 module.exports = scrive;
 `
-
+const _parser = (code) => parser.parse(code, {
+  allowImportExportEverywhere: true,
+  plugins: ["jsx", "classProperties", "typescript"],
+})
 describe('integration with babel', () => {
   let scrivener;
 
   beforeEach(() => {
-    const _parser = (code) => parser.parse(code, {
-      allowImportExportEverywhere: true,
-      plugins: ["jsx", "classProperties", "typescript"],
-    })
-  
-
     scrivener = scrive({ parser: _parser, generator: generate, code: testCode, traverse });
   })
 
@@ -155,10 +153,49 @@ describe('integration with babel', () => {
           p.node.name = 'goo'
         }
       )
-    
       .identifier('TYPES', (p) => p.node.name = 'lalalal')
       .overwrite();
 
     expect(text).toMatchSnapshot()
+  })
+
+  describe('ArrowFunctionExpression', () => {
+    describe('get by name', () => {
+      const code = `const foo = () => {}
+const bar = () => {}`
+
+      beforeEach(() => {
+        scrivener = scrive({ parser: _parser, generator: generate, code, traverse })
+      });
+
+      it('should allow a user to find an anonymous function by the variable name it is assigned to', () => {
+        scrivener.arrowFunctionExpression('foo', (path) => {
+          expect(path.node.type).toBe("ArrowFunctionExpression")
+        })
+      });
+
+      it('should allow a user to find an anonymous function amongst plurals by the variable name it is assigned to', () => {
+        scrivener.arrowFunctionExpressions('foo', (path) => {
+          expect(path.node.type).toBe("ArrowFunctionExpression")
+        })
+      });
+
+      it('should allow a user to modify an anonymous function', () => {
+        let out = scrivener.arrowFunctionExpression('foo', (path) => {
+          path.replaceWithSourceString('llalal')
+        }).overwrite();
+
+        expect(out).toMatchSnapshot();
+      })
+
+      it('should modify only the selected anonymous functions', () => {
+        const out2 = scrivener.arrowFunctionExpression('bar', (path) => {
+          path.replaceWithSourceString('llalal')
+        }).overwrite();
+
+        expect(out2).toMatchSnapshot();
+      })
+
+    })
   })
 })

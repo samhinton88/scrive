@@ -1,9 +1,7 @@
 const { visitorFrom } = require('../query/visitor-from');
-const { getPartIdentifierNameMapping } = require('../query/get-part-identifier-name-mapping')
+const { defaultOperations } = require('../query/get-part-identifier-name-mapping')
 
-const defaultOperations = (arg) => ({
-  Identifier: arg ?  (node) =>  getPartIdentifierNameMapping.Identifier(node) === arg : () => true,
-})
+
 
 class Scrive {
   state=[];

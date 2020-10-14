@@ -1,4 +1,4 @@
-const scrive = require('../scrive');
+const scrive = require('..');
 
 describe('identifier', () => {
   const node = { name: 'foo'};
