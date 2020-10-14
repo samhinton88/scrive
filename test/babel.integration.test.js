@@ -1,4 +1,4 @@
-const scrive = require('../scrive')
+const scrive = require('..')
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
 const generate = require('@babel/generator').default;
@@ -147,7 +147,7 @@ describe('integration with babel', () => {
     expect(text).toMatchSnapshot()
   });
 
-  fit('should overwrite with many queries', () => {
+  it('should overwrite with many queries', () => {
     const text = scrivener
       .identifiers(
         'scrive',
