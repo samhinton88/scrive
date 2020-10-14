@@ -5,7 +5,9 @@ const visitorFrom = (config) => {
     [config.partType](path) {
     
       if (block) return;
+      
       if (!config.test(path)) return;
+
       config.callBack && config.callBack(path)
 
       if (!config.isPlural) block = true;
